@@ -93,6 +93,16 @@ affinity: {}
 env:
   - name: PORT
     value: "8080"
+  - name: ENV
+    value: "production"
+  - name: OTEL_SERVICE_NAME
+    value: "sample-web-app"
+  - name: OTEL_SERVICE_VERSION
+    value: "1.0.0"
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "sample-web-app-otel-collector:4318"
+  - name: OTEL_INSECURE
+    value: "true"
 
 livenessProbe:
   httpGet:
@@ -105,9 +115,38 @@ livenessProbe:
 
 readinessProbe:
   httpGet:
-    path: /health
+    path: /ready
     port: http
   initialDelaySeconds: 5
   periodSeconds: 5
   timeoutSeconds: 3
   failureThreshold: 3
+
+# OpenTelemetry Configuration
+opentelemetry:
+  enabled: true
+  clusterName: "eks-cluster"
+  
+  collector:
+    replicas: 1
+    image:
+      repository: otel/opentelemetry-collector-contrib
+      tag: "0.91.0"
+      pullPolicy: IfNotPresent
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi
+  
+  # Jaeger backend (optional - set enabled: true if you have Jaeger)
+  jaeger:
+    enabled: false
+    endpoint: "jaeger-collector.observability:4317"
+    insecure: true
+  
+  # Prometheus metrics export (optional)
+  prometheus:
+    enabled: true
