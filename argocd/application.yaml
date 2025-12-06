@@ -8,7 +8,7 @@ metadata:
 spec:
   project: sample-app
   source:
-    repoURL: https://github.com/gabrielsilvao/challenge1-k8s-manifests.git
+    repoURL: git@github.com:gabrielsilvao/challenge1-k8s-manifests.git
     targetRevision: main
     path: charts/sample-web-app
     helm:

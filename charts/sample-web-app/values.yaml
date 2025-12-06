@@ -42,7 +42,7 @@ ingress:
     konghq.com/strip-path: "false"
     konghq.com/protocols: "http,https"
   hosts:
-    - host: echo.local
+    - host: ""  # Empty host accepts any hostname (wildcard)
       paths:
         - path: /
           pathType: Prefix
