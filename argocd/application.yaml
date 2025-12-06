@@ -3,6 +3,13 @@ kind: Application
 metadata:
   name: sample-web-app
   namespace: argocd
+  annotations:
+    # Argo CD Image Updater annotations
+    argocd-image-updater.argoproj.io/image-list: sample-web-app=241726813110.dkr.ecr.us-east-1.amazonaws.com/sample-web-app
+    argocd-image-updater.argoproj.io/sample-web-app.update-strategy: latest
+    argocd-image-updater.argoproj.io/sample-web-app.helm.image-name: image.repository
+    argocd-image-updater.argoproj.io/sample-web-app.helm.image-tag: image.tag
+    argocd-image-updater.argoproj.io/write-back-method: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
