@@ -1,0 +1,71 @@
+# Production environment values
+# Override default values for production environment
+
+replicaCount: 3
+
+image:
+  # Replace with your actual ECR repository URL
+  repository: 241726813110.dkr.ecr.us-east-1.amazonaws.com/sample-web-app
+  tag: "stable"
+  pullPolicy: IfNotPresent
+
+ingress:
+  enabled: true
+  className: kong
+  annotations:
+    konghq.com/strip-path: "false"
+    konghq.com/protocols: "https"
+    konghq.com/https-redirect-status-code: "301"
+  hosts:
+    - host: echo.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: echo-tls
+      hosts:
+        - echo.example.com
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+rollout:
+  enabled: true
+  strategy:
+    canary:
+      steps:
+        - setWeight: 10
+        - pause: {duration: 1m}
+        - setWeight: 30
+        - pause: {duration: 2m}
+        - setWeight: 50
+        - pause: {duration: 2m}
+        - setWeight: 70
+        - pause: {duration: 2m}
+        - setWeight: 90
+        - pause: {duration: 5m}
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - sample-web-app
+          topologyKey: kubernetes.io/hostname
