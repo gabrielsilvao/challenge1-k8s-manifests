@@ -53,6 +53,13 @@ spec:
           env:
             - name: GOMEMLIMIT
               value: "400MiB"
+            {{- if .Values.opentelemetry.datadog.enabled }}
+            - name: DD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.opentelemetry.datadog.apiKeySecret | default "datadog-api-key" }}
+                  key: api-key
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /

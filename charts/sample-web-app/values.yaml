@@ -150,3 +150,13 @@ opentelemetry:
   # Prometheus metrics export (optional)
   prometheus:
     enabled: true
+  
+  # Datadog integration
+  datadog:
+    enabled: false  # Set to true and provide API key to enable
+    site: "datadoghq.com"  # or datadoghq.eu for EU
+    # apiKeySecret: "datadog-api-key"  # Name of K8s secret containing DD_API_KEY
+    hostname: "sample-web-app"
+    env: "production"
+    service: "sample-web-app"
+    version: "1.0.0"

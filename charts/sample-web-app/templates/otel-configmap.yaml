@@ -54,6 +54,28 @@ data:
         sampling_initial: 5
         sampling_thereafter: 200
 
+      {{- if .Values.opentelemetry.datadog.enabled }}
+      # Datadog exporter
+      datadog:
+        api:
+          site: {{ .Values.opentelemetry.datadog.site | default "datadoghq.com" }}
+          key: ${DD_API_KEY}
+        hostname: {{ .Values.opentelemetry.datadog.hostname | default "sample-web-app" }}
+        env: {{ .Values.opentelemetry.datadog.env | default "production" }}
+        service: {{ .Values.opentelemetry.datadog.service | default "sample-web-app" }}
+        version: {{ .Values.opentelemetry.datadog.version | default "1.0.0" }}
+        tags:
+          - cluster:{{ .Values.opentelemetry.clusterName | default "eks-cluster" }}
+          - namespace:{{ .Release.Namespace }}
+        metrics:
+          histograms:
+            mode: distributions
+            send_aggregation_metrics: true
+        traces:
+          span_name_as_resource_name: true
+          ignore_resources: ["GET /health", "GET /ready"]
+      {{- end }}
+
       {{- if .Values.opentelemetry.jaeger.enabled }}
       # Jaeger exporter
       otlp/jaeger:
@@ -87,6 +109,9 @@ data:
           processors: [memory_limiter, resource, batch]
           exporters:
             - logging
+            {{- if .Values.opentelemetry.datadog.enabled }}
+            - datadog
+            {{- end }}
             {{- if .Values.opentelemetry.jaeger.enabled }}
             - otlp/jaeger
             {{- end }}
@@ -96,6 +121,9 @@ data:
           processors: [memory_limiter, resource, batch]
           exporters:
             - logging
+            {{- if .Values.opentelemetry.datadog.enabled }}
+            - datadog
+            {{- end }}
             {{- if .Values.opentelemetry.prometheus.enabled }}
             - prometheus
             {{- end }}
@@ -105,6 +133,9 @@ data:
           processors: [memory_limiter, resource, batch]
           exporters:
             - logging
+            {{- if .Values.opentelemetry.datadog.enabled }}
+            - datadog
+            {{- end }}
 
       telemetry:
         logs:
