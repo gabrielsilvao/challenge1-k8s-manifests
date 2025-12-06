@@ -99,9 +99,9 @@ env:
     value: "sample-web-app"
   - name: OTEL_SERVICE_VERSION
     value: "1.0.0"
-  # Send OTLP traces directly to Datadog Agent
+  # Send OTLP traces directly to Datadog Agent (host:port only, no http://)
   - name: OTEL_EXPORTER_OTLP_ENDPOINT
-    value: "http://datadog.datadog.svc.cluster.local:4318"
+    value: "datadog.datadog.svc.cluster.local:4318"
   - name: OTEL_INSECURE
     value: "true"
   - name: DD_ENV
