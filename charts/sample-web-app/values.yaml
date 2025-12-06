@@ -9,6 +9,10 @@ image:
 nameOverride: ""
 fullnameOverride: ""
 
+# Kong Prometheus Plugin for HTTP metrics
+kongPrometheusPlugin:
+  enabled: true
+
 serviceAccount:
   create: true
   annotations: {}
