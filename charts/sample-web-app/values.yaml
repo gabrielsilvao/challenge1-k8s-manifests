@@ -99,10 +99,17 @@ env:
     value: "sample-web-app"
   - name: OTEL_SERVICE_VERSION
     value: "1.0.0"
+  # Send OTLP traces directly to Datadog Agent
   - name: OTEL_EXPORTER_OTLP_ENDPOINT
-    value: "sample-web-app-otel-collector:4318"
+    value: "http://datadog.datadog.svc.cluster.local:4318"
   - name: OTEL_INSECURE
     value: "true"
+  - name: DD_ENV
+    value: "production"
+  - name: DD_SERVICE
+    value: "sample-web-app"
+  - name: DD_VERSION
+    value: "1.0.0"
 
 livenessProbe:
   httpGet:
@@ -124,7 +131,7 @@ readinessProbe:
 
 # OpenTelemetry Configuration
 opentelemetry:
-  enabled: true
+  enabled: false  # Disabled - sending directly to Datadog Agent via OTLP
   clusterName: "eks-cluster"
   
   collector:
