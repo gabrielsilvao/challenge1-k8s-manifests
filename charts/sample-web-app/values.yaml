@@ -18,7 +18,10 @@ serviceAccount:
   annotations: {}
   name: ""
 
-podAnnotations: {}
+# Datadog annotations for logs and APM
+podAnnotations:
+  ad.datadoghq.com/sample-web-app.logs: '[{"source":"go","service":"sample-web-app","tags":["env:production"]}]'
+  ad.datadoghq.com/tags: '{"env":"production","service":"sample-web-app","version":"1.0.0"}'
 
 podSecurityContext:
   runAsNonRoot: true
