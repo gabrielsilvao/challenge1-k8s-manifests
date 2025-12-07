@@ -1,5 +1,5 @@
 # Default values for sample-web-app
-replicaCount: 2
+replicaCount: 3
 
 image:
   repository: "241726813110.dkr.ecr.us-east-1.amazonaws.com/sample-web-app"
