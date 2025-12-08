@@ -33,7 +33,7 @@ securityContext:
   capabilities:
     drop:
       - ALL
-  readOnlyRootFilesystem: false  # Allow writing temp files
+  readOnlyRootFilesystem: false
   runAsNonRoot: true
   runAsUser: 1000
 
@@ -49,7 +49,7 @@ ingress:
     konghq.com/strip-path: "false"
     konghq.com/protocols: "http,https"
   hosts:
-    - host: ""  # Empty host accepts any hostname (wildcard)
+    - host: "" 
       paths:
         - path: /
           pathType: Prefix
@@ -106,7 +106,7 @@ env:
     value: "sample-web-app"
   - name: OTEL_SERVICE_VERSION
     value: "1.0.0"
-  # Send OTLP traces directly to Datadog Agent (host:port only, no http://)
+  # Send OTLP traces directly to Datadog Agent
   - name: OTEL_EXPORTER_OTLP_ENDPOINT
     value: "datadog.datadog.svc.cluster.local:4318"
   - name: OTEL_INSECURE
